@@ -6,11 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Video Chat</title>
     <link rel="stylesheet" href="main.css">
-</head>
+  
    
 <body>
     
-    <button id="join-btn">Join Stream</button>
+    <div id="login-wrapper">
+        <input type="text" id="channel-name" placeholder="Enter channel name">
+        <button id="channel-btn">Create/Join Channel</button>
+    </div>
 
     <div id="stream-wrapper">
         <div id="video-streams"></div>
@@ -24,5 +27,6 @@
     </div>
     <script src="AgoraRTC_N-4.21.0.js"></script>
     <script src="main.js"></script>
+  
 </body>
 </html>

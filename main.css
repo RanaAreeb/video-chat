@@ -1,56 +1,89 @@
-body{
-    background:#0F2027;
-    background:-webkit-linear-gradient(to right, #2C5364, #203A43, #0F2027) ;
+body {
     background: linear-gradient(to right, #2C5364, #203A43, #0F2027);
 }
 
-#join-btn{
+#login-wrapper {
     position: fixed;
-    top:50%;
-    left:50%;
-    margin-top:-50px;
-    margin-left:-100px;
-    font-size:18px;
-    padding:20px 40px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 18px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
 }
 
-#video-streams{
-    display:grid;
+#channel-name {
+    padding: 10px;
+    font-size: 16px;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+#channel-btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+}
+
+#channel-btn:hover {
+    background-color: #0056b3;
+}
+
+#video-streams {
+    display: grid;
     grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
     height: 90vh;
     width: 1400px;
-    margin:0 auto;
+    margin: 0 auto;
 }
 
-.video-container{
+.video-container {
     max-height: 100%;
     border: 2px solid black;
     background-color: #203A49;
 }
 
-.video-player{
+.video-player {
     height: 100%;
     width: 100%;
 }
 
-button{
-    border:none;
+button {
+    border: none;
     background-color: cadetblue;
-    color:#fff;
-    padding:10px 20px;
-    font-size:16px;
-    margin:2px;
+    color: #fff;
+    padding: 10px 20px;
+    font-size: 16px;
+    margin: 2px;
     cursor: pointer;
 }
 
-#stream-controls{
-    display: none;
-    justify-content: center;
-    margin-top:0.5em;
+button:hover {
+    background-color: #004d40;
 }
 
-@media screen and (max-width:1400px){
-    #video-streams{
+#stream-controls {
+    display: flex;
+    justify-content: center;
+    margin-top: 0.5em;
+}
+
+@media screen and (max-width: 1400px) {
+    #video-streams {
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
         width: 95%;
     }
