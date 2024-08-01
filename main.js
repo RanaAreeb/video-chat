@@ -1,5 +1,5 @@
 const APP_ID = "b3217bbfbb3e4b35ad15c0c0a1ffa9b9";
-const SERVER_URL = "http://127.0.0.1:3000";
+const SERVER_URL = "https://video-chat-production-f3f1.up.railway.app";
 
 const client = AgoraRTC.createClient({ mode: 'rtc', codec: 'vp8' });
 

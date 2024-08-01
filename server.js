@@ -1,12 +1,14 @@
 const express = require('express');
-const cors = require('cors'); // Import cors
+const cors = require('cors');
 const { RtcTokenBuilder, RtcRole } = require('agora-token');
+require('dotenv').config(); // Load environment variables
 
 const app = express();
-const port = 3000; // Ensure this port is free and not in use by other services
+const port = process.env.PORT || 3000;
 
-const APP_ID = 'b3217bbfbb3e4b35ad15c0c0a1ffa9b9'; // Replace with your Agora App ID
-const APP_CERTIFICATE = '0396aa11696045adaaf4d305efdbded0'; // Replace with your Agora App Certificate
+const APP_ID = process.env.APP_ID;
+const APP_CERTIFICATE = process.env.APP_CERTIFICATE;
+
 
 // Enable CORS for all origins
 app.use(cors());
@@ -33,5 +35,5 @@ app.get('/rtc/:channelName/publisher/uid/:uid', (req, res) => {
 
 // Start the server
 app.listen(port, () => {
-    console.log(`Server running at http://127.0.0.1:${port}`);
+    console.log(`Server running at http://localhost:${port}`);
 });
