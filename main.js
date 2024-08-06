@@ -183,8 +183,8 @@ let toggleCamera = async (e) => {
         e.target.style.backgroundColor = '#EE4B2B';
     }
 };
-
 let toggleScreenShare = async (e) => {
+    // Find the <i> element inside the button
     let icon = e.target.querySelector('i');
 
     if (!screenTrack) {
@@ -194,20 +194,42 @@ let toggleScreenShare = async (e) => {
             localTracks[1].stop();
         }
 
-        // Create and publish the screen track
         try {
+            // Check if the browser supports screen sharing
+            if (!navigator.mediaDevices.getDisplayMedia) {
+                throw new Error("Your browser does not support screen sharing.");
+            }
+
+            // Attempt to create a screen sharing track
             screenTrack = await AgoraRTC.createScreenVideoTrack({ cursor: "always" });
             screenTrack.play(`user-${client.uid}`);
             await client.publish(screenTrack);
+
+            // Update button icon and background color
+            if (icon) {
+                icon.classList.remove('fa-desktop');
+                icon.classList.add('fa-stop');
+            }
+            e.target.style.backgroundColor = 'cadetblue';
         } catch (error) {
             console.error("Error starting screen sharing:", error);
-            alert("Screen sharing is not supported on this device or browser.");
-            return;
-        }
+            alert(error.message || "Screen sharing failed. Please try again.");
 
-        icon.classList.remove('fa-desktop');
-        icon.classList.add('fa-stop');
-        e.target.style.backgroundColor = 'cadetblue';
+            // Attempt to revert back to the camera if screen sharing fails
+            if (localTracks[1]) {
+                await client.publish(localTracks[1]);
+                localTracks[1].play(`user-${client.uid}`);
+            }
+
+            // Reset button icon and background color
+            if (icon) {
+                icon.classList.remove('fa-stop');
+                icon.classList.add('fa-desktop');
+            }
+            e.target.style.backgroundColor = '';
+
+            return; // Exit the function as screen sharing failed
+        }
     } else {
         // Stop and close the screen track
         screenTrack.stop();
@@ -221,11 +243,16 @@ let toggleScreenShare = async (e) => {
             localTracks[1].play(`user-${client.uid}`);
         }
 
-        icon.classList.remove('fa-stop');
-        icon.classList.add('fa-desktop');
+        // Reset button icon and background color
+        if (icon) {
+            icon.classList.remove('fa-stop');
+            icon.classList.add('fa-desktop');
+        }
         e.target.style.backgroundColor = '';
     }
 };
+
+
 
 document.getElementById('leave-btn').addEventListener('click', leaveAndRemoveLocalStream);
 document.getElementById('mic-btn').addEventListener('click', toggleMic);
