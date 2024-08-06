@@ -51,7 +51,6 @@ let joinStream = async () => {
     }
 };
 
-
 // Handling local user's video and screen sharing
 let joinAndDisplayLocalStream = async () => {
     client.on('user-published', handleUserJoined);
@@ -72,6 +71,7 @@ let joinAndDisplayLocalStream = async () => {
     localTracks[1].play(`user-${UID}`);
     await client.publish([localTracks[0], localTracks[1]]);
 };
+
 // Fullscreen toggle function
 function toggleFullScreen(elementId) {
     let elem = document.getElementById(elementId);
@@ -127,12 +127,6 @@ let handleUserJoined = async (user, mediaType) => {
     }
 };
 
-
-// Your existing JavaScript logic continues here
-// ...
-
-
-
 let handleUserLeft = async (user) => {
     delete remoteUsers[user.uid];
     document.getElementById(`user-container-${user.uid}`).remove();
@@ -151,7 +145,6 @@ let leaveAndRemoveLocalStream = async () => {
 };
 
 let toggleMic = async (e) => {
-    // Find the <i> element inside the button
     let icon = e.target.querySelector('i');
 
     if (localTracks[0].muted) {
@@ -171,9 +164,7 @@ let toggleMic = async (e) => {
     }
 };
 
-
 let toggleCamera = async (e) => {
-    // Find the <i> element inside the button
     let icon = e.target.querySelector('i');
 
     if (localTracks[1].muted) {
@@ -193,7 +184,6 @@ let toggleCamera = async (e) => {
     }
 };
 
-
 let toggleScreenShare = async (e) => {
     let icon = e.target.querySelector('i');
 
@@ -205,9 +195,15 @@ let toggleScreenShare = async (e) => {
         }
 
         // Create and publish the screen track
-        screenTrack = await AgoraRTC.createScreenVideoTrack();
-        screenTrack.play(`user-${client.uid}`);
-        await client.publish(screenTrack);
+        try {
+            screenTrack = await AgoraRTC.createScreenVideoTrack({ cursor: "always" });
+            screenTrack.play(`user-${client.uid}`);
+            await client.publish(screenTrack);
+        } catch (error) {
+            console.error("Error starting screen sharing:", error);
+            alert("Screen sharing is not supported on this device or browser.");
+            return;
+        }
 
         icon.classList.remove('fa-desktop');
         icon.classList.add('fa-stop');
@@ -230,8 +226,6 @@ let toggleScreenShare = async (e) => {
         e.target.style.backgroundColor = '';
     }
 };
-
-
 
 document.getElementById('leave-btn').addEventListener('click', leaveAndRemoveLocalStream);
 document.getElementById('mic-btn').addEventListener('click', toggleMic);
