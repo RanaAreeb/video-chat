@@ -51,6 +51,8 @@ let joinStream = async () => {
     }
 };
 
+
+// Handling local user's video and screen sharing
 let joinAndDisplayLocalStream = async () => {
     client.on('user-published', handleUserJoined);
     client.on('user-left', handleUserLeft);
@@ -58,15 +60,46 @@ let joinAndDisplayLocalStream = async () => {
     let UID = await client.join(APP_ID, CHANNEL, TOKEN, null);
     localTracks = await AgoraRTC.createMicrophoneAndCameraTracks();
 
-    let player = `<div class="video-container" id="user-container-${UID}">
-                    <div class="video-player" id="user-${UID}"></div>
-                  </div>`;
+    let player = `
+        <div class="video-container" id="user-container-${UID}">
+            <div class="video-player" id="user-${UID}"></div>
+            <button class="fullscreen-btn" onclick="toggleFullScreen('user-container-${UID}')">
+                <i class="fas fa-expand"></i>
+            </button>
+        </div>`;
     document.getElementById('video-streams').insertAdjacentHTML('beforeend', player);
 
     localTracks[1].play(`user-${UID}`);
     await client.publish([localTracks[0], localTracks[1]]);
 };
+// Fullscreen toggle function
+function toggleFullScreen(elementId) {
+    let elem = document.getElementById(elementId);
 
+    if (!document.fullscreenElement) {
+        if (elem.requestFullscreen) {
+            elem.requestFullscreen();
+        } else if (elem.mozRequestFullScreen) {
+            elem.mozRequestFullScreen(); // Firefox
+        } else if (elem.webkitRequestFullscreen) {
+            elem.webkitRequestFullscreen(); // Chrome, Safari, and Opera
+        } else if (elem.msRequestFullscreen) {
+            elem.msRequestFullscreen(); // IE/Edge
+        }
+    } else {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.mozCancelFullScreen) {
+            document.mozCancelFullScreen(); // Firefox
+        } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen(); // Chrome, Safari, and Opera
+        } else if (document.msExitFullscreen) {
+            document.msExitFullscreen(); // IE/Edge
+        }
+    }
+}
+
+// Example implementation for handling user-joined event and adding fullscreen button
 let handleUserJoined = async (user, mediaType) => {
     remoteUsers[user.uid] = user;
     await client.subscribe(user, mediaType);
@@ -77,9 +110,13 @@ let handleUserJoined = async (user, mediaType) => {
             player.remove();
         }
 
-        player = `<div class="video-container" id="user-container-${user.uid}">
-                    <div class="video-player" id="user-${user.uid}"></div>
-                 </div>`;
+        player = `
+            <div class="video-container" id="user-container-${user.uid}">
+                <div class="video-player" id="user-${user.uid}"></div>
+                <button class="fullscreen-btn" onclick="toggleFullScreen('user-container-${user.uid}')">
+                    <i class="fas fa-expand"></i>
+                </button>
+            </div>`;
         document.getElementById('video-streams').insertAdjacentHTML('beforeend', player);
 
         user.videoTrack.play(`user-${user.uid}`);
@@ -89,6 +126,12 @@ let handleUserJoined = async (user, mediaType) => {
         user.audioTrack.play();
     }
 };
+
+
+// Your existing JavaScript logic continues here
+// ...
+
+
 
 let handleUserLeft = async (user) => {
     delete remoteUsers[user.uid];
@@ -108,46 +151,87 @@ let leaveAndRemoveLocalStream = async () => {
 };
 
 let toggleMic = async (e) => {
+    // Find the <i> element inside the button
+    let icon = e.target.querySelector('i');
+
     if (localTracks[0].muted) {
         await localTracks[0].setMuted(false);
-        e.target.innerText = 'Mic on';
+        if (icon) {
+            icon.classList.remove('fa-microphone-slash');
+            icon.classList.add('fa-microphone');
+        }
         e.target.style.backgroundColor = 'cadetblue';
     } else {
         await localTracks[0].setMuted(true);
-        e.target.innerText = 'Mic off';
+        if (icon) {
+            icon.classList.remove('fa-microphone');
+            icon.classList.add('fa-microphone-slash');
+        }
         e.target.style.backgroundColor = '#EE4B2B';
     }
 };
 
+
 let toggleCamera = async (e) => {
+    // Find the <i> element inside the button
+    let icon = e.target.querySelector('i');
+
     if (localTracks[1].muted) {
         await localTracks[1].setMuted(false);
-        e.target.innerText = 'Camera on';
+        if (icon) {
+            icon.classList.remove('fa-video-slash');
+            icon.classList.add('fa-video');
+        }
         e.target.style.backgroundColor = 'cadetblue';
     } else {
         await localTracks[1].setMuted(true);
-        e.target.innerText = 'Camera off';
+        if (icon) {
+            icon.classList.remove('fa-video');
+            icon.classList.add('fa-video-slash');
+        }
         e.target.style.backgroundColor = '#EE4B2B';
     }
 };
 
-let toggleScreenShare = async () => {
+
+let toggleScreenShare = async (e) => {
+    let icon = e.target.querySelector('i');
+
     if (!screenTrack) {
+        // Unpublish and stop the camera track
+        if (localTracks[1]) {
+            await client.unpublish(localTracks[1]);
+            localTracks[1].stop();
+        }
+
+        // Create and publish the screen track
         screenTrack = await AgoraRTC.createScreenVideoTrack();
-        let player = `<div class="video-container" id="screen-share-container">
-                        <div class="video-player" id="screen-share"></div>
-                     </div>`;
-        document.getElementById('video-streams').insertAdjacentHTML('beforeend', player);
-        screenTrack.play('screen-share');
+        screenTrack.play(`user-${client.uid}`);
         await client.publish(screenTrack);
+
+        icon.classList.remove('fa-desktop');
+        icon.classList.add('fa-stop');
+        e.target.style.backgroundColor = 'cadetblue';
     } else {
+        // Stop and close the screen track
         screenTrack.stop();
         screenTrack.close();
-        document.getElementById('screen-share-container').remove();
-        screenTrack = null;
         await client.unpublish(screenTrack);
+        screenTrack = null;
+
+        // Republish and play the camera track
+        if (localTracks[1]) {
+            await client.publish(localTracks[1]);
+            localTracks[1].play(`user-${client.uid}`);
+        }
+
+        icon.classList.remove('fa-stop');
+        icon.classList.add('fa-desktop');
+        e.target.style.backgroundColor = '';
     }
 };
+
+
 
 document.getElementById('leave-btn').addEventListener('click', leaveAndRemoveLocalStream);
 document.getElementById('mic-btn').addEventListener('click', toggleMic);
