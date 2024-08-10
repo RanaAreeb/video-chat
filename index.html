@@ -9,18 +9,24 @@
 </head>
 <body>
     <div id="login-wrapper">
-        <input type="text" id="channel-name" placeholder="Enter channel name">
-        <button id="channel-btn">Create/Join Channel</button>
+        <h1>Video Chatting App</h1>
+        <input type="text" id="channel-name" placeholder="Enter channel name to create">
+        <button id="channel-btn">Create Channel</button>
+        <input type="text" id="channel-name1" placeholder="Enter channel name to join">
+        <button id="channel-btn1">join Channel</button>
+        
     </div>
+    
 
     <div id="stream-wrapper">
         <div id="video-streams"></div>
 
+        
         <div id="stream-controls">
-            <button id="leave-btn"><i class="fas fa-sign-out-alt"></i></button>
-            <button id="mic-btn"><i class="fas fa-microphone"></i></button>
-            <button id="camera-btn"><i class="fas fa-video"></i></button>
-            <button id="screenshare-btn"><i class="fas fa-desktop"></i></button>
+            <button id="leave-btn" title="Leave Channel"><i class="fas fa-sign-out-alt"></i></button>
+            <button id="mic-btn" title=" Microphone"><i class="fas fa-microphone"></i></button>
+            <button id="camera-btn" title=" Camera"><i class="fas fa-video"></i></button>
+            <button id="screenshare-btn" title="Share Screen"><i class="fas fa-desktop"></i></button>
         </div>
     </div>
 

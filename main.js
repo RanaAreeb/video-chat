@@ -40,11 +40,25 @@ document.getElementById('channel-btn').addEventListener('click', async () => {
     }
 });
 
+document.getElementById('channel-btn1').addEventListener('click', async () => {
+    const channelName = document.getElementById('channel-name1').value;
+    if (channelName) {
+        TOKEN = await fetchToken(channelName);
+        if (TOKEN) {
+            CHANNEL = channelName;
+            await joinStream();
+        }
+    } else {
+        alert("Please enter a channel name.");
+    }
+});
+
 let joinStream = async () => {
     try {
         await joinAndDisplayLocalStream();
         document.getElementById('login-wrapper').style.display = 'none';
         document.getElementById('stream-wrapper').style.display = 'block';
+        document.getElementById('stream-controls').style.display = 'flex'; // Show stream controls
     } catch (error) {
         console.error("Failed to join stream:", error);
         alert("Failed to join stream. Please check the console for details.");
@@ -142,6 +156,7 @@ let leaveAndRemoveLocalStream = async () => {
     document.getElementById('login-wrapper').style.display = 'block';
     document.getElementById('stream-wrapper').style.display = 'none';
     document.getElementById('video-streams').innerHTML = '';
+    document.getElementById('stream-controls').style.display = 'none'; // Hide stream controls
 };
 
 let toggleMic = async (e) => {
@@ -183,6 +198,7 @@ let toggleCamera = async (e) => {
         e.target.style.backgroundColor = '#EE4B2B';
     }
 };
+
 let toggleScreenShare = async (e) => {
     // Find the <i> element inside the button
     let icon = e.target.querySelector('i');
@@ -251,8 +267,6 @@ let toggleScreenShare = async (e) => {
         e.target.style.backgroundColor = '';
     }
 };
-
-
 
 document.getElementById('leave-btn').addEventListener('click', leaveAndRemoveLocalStream);
 document.getElementById('mic-btn').addEventListener('click', toggleMic);

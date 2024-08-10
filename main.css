@@ -1,7 +1,10 @@
 /* Background and main layout */
 body {
-    background: linear-gradient(to right, #2C5364, #203A43, #0F2027);
+    background: linear-gradient(to right, #395b6a, #3a768a, #0d2029);
+    color: #fff; /* Adjust text color for better visibility */
+    font-family: 'Roboto', sans-serif; /* Modern font */
 }
+
 
 #login-wrapper {
     position: fixed;
@@ -10,52 +13,73 @@ body {
     transform: translate(-50%, -50%);
     font-size: 18px;
     padding: 20px;
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
+    background-color: #201f1f;
+    border: 1px solid #444;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 10px;
+    gap: 15px;
 }
 
-#channel-name {
+#channel-name{
     padding: 10px;
     font-size: 16px;
     width: 100%;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    border: none;
+    border-radius: 8px;
     box-sizing: border-box;
+    background: #2b2b2b;
+    color: #ccc;
 }
-
-#channel-btn {
-    padding: 10px 20px;
+#channel-name:hover{
+    transform: scale(1.05);
+}
+#channel-name1{
+    padding: 10px;
     font-size: 16px;
-    background-color: #007bff;
+    width: 100%;
+    border: none;
+    border-radius: 8px;
+    box-sizing: border-box;
+    background: #2b2b2b;
+    color: #ccc;
+    margin-top: 15px;
+}
+#channel-name1:hover{
+    transform: scale(1.05);
+}
+#channel-btn, #channel-btn1 {
+    padding: 12px 24px;
+    font-size: 16px;
+    background: linear-gradient(135deg, #6e5baf, #a777e3);
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 8px;
     cursor: pointer;
     width: 100%;
+    transition: background 0.3s, transform 0.2s;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
 }
 
-#channel-btn:hover {
-    background-color: #0056b3;
+#channel-btn:hover, #channel-btn1:hover {
+    background: linear-gradient(135deg, #a777e3, #6e5baf);
+    transform: scale(1.05);
 }
 
 #video-streams {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-    height: 90vh;
+    height: 80vh; /* Adjust height to fit the new margin */
     width: 1400px;
-    margin: 0 auto;
+    margin: 95px auto 0; /* Added top margin to move frames down */
 }
 
 .video-container {
     max-height: 100%;
-    border: 2px solid black;
-    background-color: #203A49;
+    border: 2px solid #444;
+    background-color: #2b2b2b;
     position: relative; /* For positioning fullscreen button */
     overflow: hidden; /* Ensure the contents fit within the container */
 }
@@ -70,32 +94,37 @@ body {
     position: absolute;
     bottom: 10px;
     right: 10px;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.6);
     border: none;
     color: white;
-    padding: 5px;
+    padding: 8px;
     cursor: pointer;
     font-size: 18px;
-    border-radius: 4px;
+    border-radius: 5px;
+    transition: background 0.3s, transform 0.2s;
 }
 
 .fullscreen-btn:hover {
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: rgba(0, 0, 0, 0.8);
+    transform: scale(1.1);
 }
 
 /* Button Styles with Icons */
 button {
     border: none;
-    background-color: transparent; /* Transparent background */
+    background: linear-gradient(135deg, #6e5baf, #a777e3); /* Gradient background */
     color: #fff; /* White icon color */
-    padding: 10px;
-    font-size: 20px; /* Adjust size for icons */
-    margin: 2px;
+    padding: 12px;
+    font-size: 24px; /* Adjust size for icons */
+    margin: 5px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     outline: none; /* Remove outline */
+    border-radius: 8px;
+    transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
 }
 
 button i {
@@ -103,14 +132,39 @@ button i {
 }
 
 button:hover {
-    color: #ddd; /* Slightly change color on hover */
+    background: linear-gradient(135deg, #a777e3, #6e5baf);
+    transform: scale(1.05);
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.4);
 }
 
+/* Add this CSS rule to hide the stream controls initially */
 #stream-controls {
+    display: none; /* Hide controls initially */
     display: flex;
     justify-content: center;
-    margin-top: 0.5em;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: transparent;
+    padding: 10px;
+    z-index: 10;
 }
+
+#stream-controls button {
+    background: none;
+    border: none;
+    color: white; /* Adjust based on your design */
+    font-size: 44px; /* Adjust this value as needed */
+    margin: 0 10px; /* Adjust spacing between icons */
+    cursor: pointer;
+}
+
+#stream-controls button:hover {
+    opacity: 0.8; /* Optional: Adds a hover effect */
+    transform: scale(1.1);
+}
+
 
 @media screen and (max-width: 1400px) {
     #video-streams {
