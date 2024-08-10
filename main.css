@@ -5,7 +5,6 @@ body {
     font-family: 'Roboto', sans-serif; /* Modern font */
 }
 
-
 #login-wrapper {
     position: fixed;
     top: 50%;
@@ -21,9 +20,12 @@ body {
     flex-direction: column;
     align-items: center;
     gap: 15px;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 
-#channel-name{
+#channel-name,
+#channel-name1 {
     padding: 10px;
     font-size: 16px;
     width: 100%;
@@ -33,24 +35,18 @@ body {
     background: #2b2b2b;
     color: #ccc;
 }
-#channel-name:hover{
+
+#channel-name:hover,
+#channel-name1:hover {
     transform: scale(1.05);
 }
-#channel-name1{
-    padding: 10px;
-    font-size: 16px;
-    width: 100%;
-    border: none;
-    border-radius: 8px;
-    box-sizing: border-box;
-    background: #2b2b2b;
-    color: #ccc;
+
+#channel-name1 {
     margin-top: 15px;
 }
-#channel-name1:hover{
-    transform: scale(1.05);
-}
-#channel-btn, #channel-btn1 {
+
+#channel-btn,
+#channel-btn1 {
     padding: 12px 24px;
     font-size: 16px;
     background: linear-gradient(135deg, #6e5baf, #a777e3);
@@ -63,7 +59,8 @@ body {
     box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
 }
 
-#channel-btn:hover, #channel-btn1:hover {
+#channel-btn:hover,
+#channel-btn1:hover {
     background: linear-gradient(135deg, #a777e3, #6e5baf);
     transform: scale(1.05);
 }
@@ -165,10 +162,86 @@ button:hover {
     transform: scale(1.1);
 }
 
-
+/* Media Queries for Responsiveness */
 @media screen and (max-width: 1400px) {
     #video-streams {
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
         width: 95%;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    #login-wrapper {
+        padding: 15px;
+        font-size: 16px;
+    }
+
+    #channel-name,
+    #channel-name1 {
+        font-size: 14px;
+    }
+
+    #channel-btn,
+    #channel-btn1 {
+        padding: 10px 20px;
+        font-size: 14px;
+    }
+
+    #video-streams {
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        width: 100%;
+        margin: 50px auto 0; /* Adjust margin for smaller screens */
+    }
+
+    .fullscreen-btn {
+        font-size: 16px;
+        padding: 6px;
+    }
+
+    button {
+        font-size: 20px;
+        padding: 10px;
+    }
+
+    #stream-controls button {
+        font-size: 36px;
+        margin: 0 5px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    #login-wrapper {
+        width: 90%;
+    }
+
+    #channel-name,
+    #channel-name1 {
+        font-size: 12px;
+    }
+
+    #channel-btn,
+    #channel-btn1 {
+        padding: 8px 16px;
+        font-size: 12px;
+    }
+
+    #video-streams {
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        margin: 30px auto 0; /* Adjust margin for very small screens */
+    }
+
+    .fullscreen-btn {
+        font-size: 14px;
+        padding: 4px;
+    }
+
+    button {
+        font-size: 18px;
+        padding: 8px;
+    }
+
+    #stream-controls button {
+        font-size: 28px;
+        margin: 0 2px;
     }
 }
